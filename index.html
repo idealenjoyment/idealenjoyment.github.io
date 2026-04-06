@@ -9,17 +9,10 @@
   <style>
     :root {
       --blue: #1a0dab;
-      --green: #006621;
-      --grey: #545454;
       --light-grey: #70757a;
       --border: #dfe1e5;
       --hover-bg: #f8f9fa;
-      --link-visited: #681da8;
-      --red: #d93025;
-      --bg: #fff;
       --surface: #f8f9fa;
-      --chip-bg: #e8eaed;
-      --chip-text: #3c4043;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Roboto', 'Google Sans', sans-serif; background: #fff; color: #202124; font-size: 14px; }
@@ -32,45 +25,39 @@
       position: sticky; top: 0; background: #fff; z-index: 100;
       flex-wrap: wrap;
     }
-    .logo { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; white-space: nowrap; }
+    .logo { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; white-space: nowrap; cursor:pointer; }
     .logo span:nth-child(1){ color:#4285F4; }
     .logo span:nth-child(2){ color:#EA4335; }
     .logo span:nth-child(3){ color:#FBBC05; }
     .logo span:nth-child(4){ color:#4285F4; }
     .logo span:nth-child(5){ color:#34A853; }
     .logo span:nth-child(6){ color:#EA4335; }
-
     .search-bar {
       display: flex; align-items: center; gap: 12px;
       flex: 1; max-width: 692px;
       border: 1px solid var(--border); border-radius: 24px;
       padding: 8px 16px; box-shadow: 0 1px 6px rgba(32,33,36,.1);
-      font-size: 16px; color: #202124;
-      background: #fff;
+      font-size: 16px; color: #202124; background: #fff;
     }
     .search-bar span { color: var(--light-grey); font-size: 20px; }
     .search-bar .query { flex: 1; }
     .header-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
     .avatar {
-      width: 32px; height: 32px; border-radius: 50%; 
-      background: linear-gradient(135deg, #4285F4, #34A853);
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg,#4285F4,#34A853);
       display: flex; align-items: center; justify-content: center;
       color: #fff; font-weight: 700; font-size: 14px; cursor: pointer;
+      overflow: hidden;
     }
+    .avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
 
     /* ── NAV TABS ── */
-    nav {
-      display: flex; align-items: center; gap: 0;
-      padding: 0 0 0 160px; margin-top: 8px;
-      overflow-x: auto;
-    }
+    nav { display: flex; align-items: center; padding: 0 0 0 160px; margin-top: 8px; overflow-x: auto; }
     nav a {
       display: flex; align-items: center; gap: 6px;
-      padding: 12px 16px 10px;
-      text-decoration: none; color: var(--light-grey);
+      padding: 12px 16px 10px; text-decoration: none; color: var(--light-grey);
       font-size: 13px; white-space: nowrap; font-family: 'Google Sans', sans-serif;
-      border-bottom: 3px solid transparent;
-      transition: color .15s, border-color .15s;
+      border-bottom: 3px solid transparent; transition: color .15s, border-color .15s; cursor: pointer;
     }
     nav a:hover { color: #202124; }
     nav a.active { color: #1a73e8; border-bottom-color: #1a73e8; }
@@ -78,18 +65,18 @@
 
     /* ── LAYOUT ── */
     .layout {
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 40px;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px 24px 24px 180px;
+      display: grid; grid-template-columns: 1fr 340px; gap: 40px;
+      max-width: 1200px; margin: 0 auto; padding: 24px 24px 24px 180px;
     }
-    @media(max-width: 900px){
+    @media(max-width:900px){
       .layout { grid-template-columns: 1fr; padding: 16px; }
       .sidebar { display: none; }
       nav { padding-left: 0; }
     }
+
+    /* ── PAGE VIEWS ── */
+    .page { display: none; animation: fadeIn .25s ease both; }
+    .page.active { display: block; }
 
     /* ── RESULT META ── */
     .result-meta { color: var(--light-grey); font-size: 13px; margin-bottom: 16px; }
@@ -100,15 +87,14 @@
     .result-favicon {
       width: 18px; height: 18px; border-radius: 50%;
       background: linear-gradient(135deg,#4285F4,#34A853);
-      display: flex; align-items:center;justify-content:center;
+      display: flex; align-items:center; justify-content:center;
       font-size:9px; color:#fff; font-weight:700; flex-shrink:0;
     }
     .result-url-text { font-size: 12px; color: var(--light-grey); }
     .result-title {
       font-size: 20px; font-weight: 400; color: var(--blue);
       cursor: pointer; font-family: 'Google Sans', sans-serif;
-      line-height: 1.3; margin-bottom: 6px;
-      text-decoration: none; display: block;
+      line-height: 1.3; margin-bottom: 6px; text-decoration: none; display: block;
     }
     .result-title:hover { text-decoration: underline; }
     .result-desc { font-size: 14px; color: #4d5156; line-height: 1.58; max-width: 650px; }
@@ -119,531 +105,755 @@
     .sitelink {
       border: 1px solid var(--border); border-radius: 8px;
       padding: 10px 16px; text-decoration: none; color: var(--blue);
-      font-size: 13px; font-family: 'Google Sans',sans-serif;
-      transition: background .15s;
+      font-size: 13px; font-family: 'Google Sans',sans-serif; transition: background .15s; cursor:pointer;
     }
     .sitelink:hover { background: var(--hover-bg); }
     .sitelink small { display: block; color: var(--light-grey); font-size: 11px; margin-top: 2px; }
 
     /* ── FEATURED SNIPPET ── */
     .featured {
-      border-left: 4px solid #4285F4;
-      background: var(--hover-bg); border-radius: 8px;
-      padding: 16px 20px; margin-bottom: 32px;
+      border-left: 4px solid #4285F4; background: var(--hover-bg);
+      border-radius: 8px; padding: 16px 20px; margin-bottom: 32px;
     }
     .featured-label { font-size: 11px; color: var(--light-grey); text-transform:uppercase; letter-spacing:.5px; margin-bottom: 8px; }
     .featured-title { font-size: 16px; font-weight:500; margin-bottom: 8px; }
     .featured-body { font-size: 14px; color: #4d5156; line-height: 1.6; }
     .skill-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-    .pill {
-      background: #e8f0fe; color: #1a73e8; border-radius: 16px;
-      padding: 4px 12px; font-size: 12px; font-weight: 500;
-    }
-    .pill.green { background: #e6f4ea; color: #137333; }
-    .pill.yellow { background: #fef7e0; color: #b06000; }
-    .pill.red { background: #fce8e6; color: #c5221f; }
+    .pill { background:#e8f0fe; color:#1a73e8; border-radius:16px; padding:4px 12px; font-size:12px; font-weight:500; }
+    .pill.green { background:#e6f4ea; color:#137333; }
+    .pill.yellow { background:#fef7e0; color:#b06000; }
+    .pill.red { background:#fce8e6; color:#c5221f; }
 
     /* ── PEOPLE ALSO ASK ── */
     .paa { margin-bottom: 32px; }
     .paa-title { font-size: 17px; font-family:'Google Sans',sans-serif; font-weight:400; margin-bottom:12px; }
-    .paa-item {
-      border: 1px solid var(--border); border-radius: 8px;
-      margin-bottom: 4px; overflow: hidden;
-    }
+    .paa-item { border:1px solid var(--border); border-radius:8px; margin-bottom:4px; overflow:hidden; }
     .paa-q {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 16px; cursor: pointer; font-size: 14px; font-weight: 500;
-      background: #fff; transition: background .15s;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:14px 16px; cursor:pointer; font-size:14px; font-weight:500;
+      background:#fff; transition:background .15s;
     }
     .paa-q:hover { background: var(--hover-bg); }
     .paa-a {
-      display: none; padding: 12px 16px 16px;
-      background: var(--hover-bg); font-size: 14px;
-      color: #4d5156; line-height: 1.6; border-top: 1px solid var(--border);
+      display:none; padding:12px 16px 16px; background:var(--hover-bg);
+      font-size:14px; color:#4d5156; line-height:1.6; border-top:1px solid var(--border);
     }
-    .paa-item.open .paa-a { display: block; }
-    .paa-item.open .paa-q .material-symbols-outlined { transform: rotate(180deg); }
-    .paa-q .material-symbols-outlined { transition: transform .2s; font-size: 20px; color: var(--light-grey); }
+    .paa-item.open .paa-a { display:block; }
+    .paa-item.open .paa-q .material-symbols-outlined { transform:rotate(180deg); }
+    .paa-q .material-symbols-outlined { transition:transform .2s; font-size:20px; color:var(--light-grey); }
 
     /* ── PROJECT CARDS ── */
-    .project-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
-    @media(max-width:600px){ .project-grid { grid-template-columns:1fr; } }
+    .project-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+    @media(max-width:600px){ .project-grid{grid-template-columns:1fr;} }
     .project-card {
-      border: 1px solid var(--border); border-radius: 12px;
-      padding: 16px; text-decoration: none; color: inherit;
-      transition: box-shadow .2s, border-color .2s;
-      display: block;
+      border:1px solid var(--border); border-radius:12px; padding:16px;
+      text-decoration:none; color:inherit; transition:box-shadow .2s,border-color .2s;
+      display:block; cursor:pointer;
     }
-    .project-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,.12); border-color: #aaa; }
-    .project-icon { font-size: 28px; margin-bottom: 8px; }
-    .project-name { font-size: 15px; font-weight: 500; color: var(--blue); margin-bottom: 4px; font-family:'Google Sans',sans-serif; }
-    .project-tech { font-size: 12px; color: var(--light-grey); margin-bottom: 6px; }
-    .project-desc { font-size: 13px; color: #4d5156; line-height: 1.5; }
+    .project-card:hover { box-shadow:0 2px 12px rgba(0,0,0,.12); border-color:#aaa; }
+    .project-icon { font-size:28px; margin-bottom:8px; }
+    .project-name { font-size:15px; font-weight:500; color:var(--blue); margin-bottom:4px; font-family:'Google Sans',sans-serif; }
+    .project-tech { font-size:12px; color:var(--light-grey); margin-bottom:6px; }
+    .project-desc { font-size:13px; color:#4d5156; line-height:1.5; }
 
-    /* ── KNOWLEDGE PANEL (sidebar) ── */
-    .sidebar { font-size: 13px; }
-    .kp {
-      border: 1px solid var(--border); border-radius: 12px;
-      padding: 20px; margin-bottom: 16px;
+    /* ── SECTION DIVIDER ── */
+    .section-divider { border:none; border-top:1px solid var(--border); margin:8px 0 24px; }
+
+    /* ── DETAIL PAGE ── */
+    .detail-back {
+      display:inline-flex; align-items:center; gap:6px;
+      color:#1a73e8; font-size:13px; cursor:pointer;
+      margin-bottom:20px; padding:6px 12px; border-radius:20px;
+      border:1px solid var(--border); transition:background .15s;
+      font-family:'Google Sans',sans-serif; text-decoration:none;
     }
-    .kp-name { font-size: 22px; font-family:'Google Sans',sans-serif; font-weight:400; margin-bottom:4px; }
-    .kp-role { font-size: 13px; color: var(--light-grey); margin-bottom: 12px; }
+    .detail-back:hover { background:var(--hover-bg); }
+    .detail-back .material-symbols-outlined { font-size:16px; }
+    .detail-hero {
+      background:linear-gradient(135deg,#e8f0fe 0%,#f0f8e8 100%);
+      border-radius:12px; padding:28px; margin-bottom:28px;
+      border:1px solid var(--border);
+    }
+    .detail-hero-title { font-size:26px; font-family:'Google Sans',sans-serif; font-weight:500; margin-bottom:6px; }
+    .detail-hero-sub { color:var(--light-grey); font-size:14px; margin-bottom:16px; }
+    .detail-section { margin-bottom:32px; }
+    .detail-section-title {
+      font-size:16px; font-weight:500; font-family:'Google Sans',sans-serif;
+      border-bottom:2px solid #e8f0fe; padding-bottom:8px; margin-bottom:16px; color:#202124;
+    }
+    .exp-card {
+      border:1px solid var(--border); border-radius:12px; padding:20px;
+      margin-bottom:16px; transition:box-shadow .15s;
+    }
+    .exp-card:hover { box-shadow:0 2px 10px rgba(0,0,0,.08); }
+    .exp-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; gap:8px; }
+    .exp-company { font-size:16px; font-weight:600; color:#202124; }
+    .exp-role { font-size:14px; color:#1a73e8; font-weight:500; margin-bottom:4px; }
+    .exp-period { font-size:12px; color:var(--light-grey); white-space:nowrap; }
+    .exp-location { font-size:12px; color:var(--light-grey); }
+    .exp-bullets { margin-top:12px; padding-left:18px; }
+    .exp-bullets li { font-size:14px; color:#4d5156; line-height:1.7; margin-bottom:6px; }
+    .exp-bullets li strong { color:#202124; }
+    .exp-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+    .exp-tag {
+      background:#f1f3f4; color:#3c4043; border-radius:12px;
+      padding:3px 10px; font-size:11px; font-weight:500;
+    }
+    .edu-card {
+      border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:16px;
+      display:flex; gap:16px; align-items:flex-start;
+    }
+    .edu-icon {
+      width:48px; height:48px; border-radius:10px; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:22px; background:#e8f0fe;
+    }
+    .edu-body { flex:1; }
+    .edu-inst { font-size:16px; font-weight:600; }
+    .edu-degree { font-size:14px; color:#1a73e8; margin:2px 0 4px; }
+    .edu-period { font-size:12px; color:var(--light-grey); }
+    .edu-detail { font-size:13px; color:#4d5156; margin-top:8px; line-height:1.6; }
+    .skills-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; }
+    .skill-group { border:1px solid var(--border); border-radius:10px; padding:14px; }
+    .skill-group-title { font-size:12px; font-weight:600; color:var(--light-grey); text-transform:uppercase; letter-spacing:.5px; margin-bottom:10px; }
+    .skill-item { font-size:13px; color:#202124; padding:4px 0; display:flex; align-items:center; gap:6px; }
+    .skill-dot { width:6px; height:6px; border-radius:50%; background:#1a73e8; flex-shrink:0; }
+    .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media(max-width:600px){ .contact-grid{grid-template-columns:1fr;} }
+    .contact-card {
+      border:1px solid var(--border); border-radius:12px; padding:18px;
+      display:flex; align-items:center; gap:14px; text-decoration:none; color:inherit;
+      transition:box-shadow .15s, border-color .15s;
+    }
+    .contact-card:hover { box-shadow:0 2px 10px rgba(0,0,0,.1); border-color:#aaa; }
+    .contact-icon {
+      width:44px; height:44px; border-radius:10px; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center; font-size:22px;
+    }
+    .contact-label { font-size:12px; color:var(--light-grey); }
+    .contact-val { font-size:14px; font-weight:500; color:#1a73e8; }
+
+    /* ── TIMELINE ── */
+    .timeline { margin-top:12px; }
+    .tl-item { display:flex; gap:14px; margin-bottom:16px; }
+    .tl-dot-col { display:flex; flex-direction:column; align-items:center; padding-top:2px; }
+    .tl-dot { width:10px; height:10px; border-radius:50%; background:#4285F4; flex-shrink:0; }
+    .tl-line { flex:1; width:2px; background:var(--border); margin-top:4px; }
+    .tl-content { flex:1; }
+    .tl-company { font-weight:500; font-size:14px; }
+    .tl-meta { color:var(--light-grey); font-size:12px; margin:2px 0 4px; }
+    .tl-desc { font-size:13px; color:#4d5156; line-height:1.5; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { font-size:13px; }
+    .kp { border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:16px; }
+    .kp-name { font-size:22px; font-family:'Google Sans',sans-serif; font-weight:400; margin-bottom:4px; }
+    .kp-role { font-size:13px; color:var(--light-grey); margin-bottom:12px; }
     .kp-avatar {
-      width: 100%; aspect-ratio: 1; border-radius: 12px; margin-bottom: 16px;
-      background: linear-gradient(135deg, #1a73e8 0%, #34A853 50%, #FBBC05 100%);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 64px; font-weight: 700; color: rgba(255,255,255,0.9);
-      font-family: 'Google Sans', sans-serif;
-      letter-spacing: -4px; overflow: hidden; position: relative;
+      width:100%; aspect-ratio:1; border-radius:12px; margin-bottom:16px;
+      background:linear-gradient(135deg,#1a73e8 0%,#34A853 50%,#FBBC05 100%);
+      display:flex; align-items:center; justify-content:center;
+      font-size:64px; font-weight:700; color:rgba(255,255,255,0.9);
+      font-family:'Google Sans',sans-serif; letter-spacing:-4px; overflow:hidden; position:relative;
     }
-    .kp-avatar img {
-      width: 100%; height: 100%; object-fit: cover; object-position: center top;
-      border-radius: 12px; display: block;
-    }
-    /* LinkedIn card */
-    .li-card {
-      border: 1px solid var(--border); border-radius: 12px;
-      overflow: hidden; margin-bottom: 16px;
-    }
-    .li-banner {
-      height: 72px;
-      background: linear-gradient(120deg, #0a66c2 0%, #0d8fde 100%);
-      position: relative;
-    }
-    .li-banner-logo {
-      position: absolute; bottom: -22px; left: 16px;
-      width: 52px; height: 52px; border-radius: 8px;
-      background: #fff; border: 2px solid #fff;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,.15);
-      overflow: hidden;
-    }
-    .li-banner-logo img {
-      width: 100%; height: 100%; object-fit: cover; border-radius: 6px;
-    }
-    .li-banner-logo-fallback {
-      font-size: 22px; font-weight: 700; color: #fff;
-      background: linear-gradient(135deg,#1a73e8,#34A853);
-      width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
-      border-radius: 6px;
-    }
-    .li-body { padding: 32px 16px 16px; }
-    .li-name { font-size: 15px; font-weight: 600; color: #202124; }
-    .li-headline { font-size: 12px; color: #4d5156; margin: 2px 0 8px; line-height: 1.4; }
-    .li-meta { display: flex; gap: 12px; font-size: 11px; color: var(--light-grey); margin-bottom: 12px; flex-wrap: wrap; }
-    .li-meta span { display: flex; align-items: center; gap: 3px; }
-    .li-meta .material-symbols-outlined { font-size: 13px; }
-    .li-btn {
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-      width: 100%; padding: 7px 0; border-radius: 20px;
-      border: 1.5px solid #0a66c2; color: #0a66c2;
-      font-size: 13px; font-weight: 600; text-decoration: none;
-      font-family: 'Google Sans', sans-serif;
-      transition: background .15s;
-    }
-    .li-btn:hover { background: #e8f0fe; }
-    .li-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
-    .li-divider { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
-    .li-stat-row { display: flex; gap: 0; }
-    .li-stat { flex: 1; text-align: center; padding: 8px 4px; }
-    .li-stat .n { font-size: 15px; font-weight: 600; color: #0a66c2; }
-    .li-stat .l { font-size: 10px; color: var(--light-grey); margin-top: 2px; }
-    .kp-desc { color: #4d5156; line-height: 1.6; margin-bottom: 16px; }
-    .kp-row { display: flex; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
-    .kp-row:last-of-type { border-bottom: none; }
-    .kp-label { color: var(--light-grey); width: 80px; flex-shrink: 0; }
-    .kp-val { color: #202124; }
-    .kp-links { display: flex; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
+    .kp-avatar img { width:100%; height:100%; object-fit:cover; object-position:center top; border-radius:12px; display:block; }
+    .kp-desc { color:#4d5156; line-height:1.6; margin-bottom:16px; }
+    .kp-row { display:flex; gap:8px; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+    .kp-row:last-of-type { border-bottom:none; }
+    .kp-label { color:var(--light-grey); width:80px; flex-shrink:0; }
+    .kp-val { color:#202124; }
+    .kp-links { display:flex; gap:12px; margin-top:14px; flex-wrap:wrap; }
     .kp-link {
-      display: flex; align-items: center; gap: 6px;
-      color: #1a73e8; text-decoration: none; font-size: 13px;
-      padding: 6px 12px; border: 1px solid var(--border); border-radius: 20px;
-      transition: background .15s;
+      display:flex; align-items:center; gap:6px; color:#1a73e8; text-decoration:none;
+      font-size:13px; padding:6px 12px; border:1px solid var(--border); border-radius:20px; transition:background .15s;
     }
-    .kp-link:hover { background: var(--hover-bg); }
-    .kp-link .material-symbols-outlined { font-size: 16px; }
+    .kp-link:hover { background:var(--hover-bg); }
+    .kp-link .material-symbols-outlined { font-size:16px; }
+    .stat-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .stat-chip { background:var(--hover-bg); border:1px solid var(--border); border-radius:8px; padding:10px 14px; text-align:center; flex:1; min-width:80px; }
+    .stat-chip .num { font-size:18px; font-weight:500; color:#1a73e8; font-family:'Google Sans',sans-serif; }
+    .stat-chip .label { font-size:11px; color:var(--light-grey); margin-top:2px; }
 
-    /* ── STAT CHIPS ── */
-    .stat-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-    .stat-chip {
-      background: var(--hover-bg); border: 1px solid var(--border);
-      border-radius: 8px; padding: 10px 14px; text-align: center;
-      flex: 1; min-width: 80px;
+    /* ── LINKEDIN CARD ── */
+    .li-card { border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:16px; }
+    .li-banner { height:72px; background:linear-gradient(120deg,#0a66c2 0%,#0d8fde 100%); position:relative; }
+    .li-banner-logo {
+      position:absolute; bottom:-22px; left:16px;
+      width:52px; height:52px; border-radius:8px;
+      background:#fff; border:2px solid #fff; overflow:hidden;
+      box-shadow:0 2px 6px rgba(0,0,0,.15);
     }
-    .stat-chip .num { font-size: 18px; font-weight: 500; color: #1a73e8; font-family:'Google Sans',sans-serif; }
-    .stat-chip .label { font-size: 11px; color: var(--light-grey); margin-top: 2px; }
+    .li-banner-logo img { width:100%; height:100%; object-fit:cover; border-radius:6px; }
+    .li-banner-logo-fallback {
+      font-size:22px; font-weight:700; color:#fff;
+      background:linear-gradient(135deg,#1a73e8,#34A853);
+      width:100%; height:100%; display:flex; align-items:center; justify-content:center; border-radius:6px;
+    }
+    .li-body { padding:32px 16px 16px; }
+    .li-name { font-size:15px; font-weight:600; color:#202124; }
+    .li-headline { font-size:12px; color:#4d5156; margin:2px 0 8px; line-height:1.4; }
+    .li-meta { display:flex; gap:12px; font-size:11px; color:var(--light-grey); margin-bottom:12px; flex-wrap:wrap; }
+    .li-meta span { display:flex; align-items:center; gap:3px; }
+    .li-meta .material-symbols-outlined { font-size:13px; }
+    .li-btn {
+      display:flex; align-items:center; justify-content:center; gap:6px;
+      width:100%; padding:7px 0; border-radius:20px; border:1.5px solid #0a66c2; color:#0a66c2;
+      font-size:13px; font-weight:600; text-decoration:none; font-family:'Google Sans',sans-serif; transition:background .15s;
+    }
+    .li-btn:hover { background:#e8f0fe; }
+    .li-btn svg { width:16px; height:16px; flex-shrink:0; }
+    .li-divider { border:none; border-top:1px solid var(--border); margin:12px 0; }
+    .li-stat-row { display:flex; }
+    .li-stat { flex:1; text-align:center; padding:8px 4px; }
+    .li-stat .n { font-size:15px; font-weight:600; color:#0a66c2; }
+    .li-stat .l { font-size:10px; color:var(--light-grey); margin-top:2px; }
 
     /* ── FOOTER ── */
     footer {
-      background: var(--surface); border-top: 1px solid var(--border);
-      padding: 12px 24px; color: var(--light-grey); font-size: 13px;
-      display: flex; gap: 24px; flex-wrap: wrap; margin-top: 32px;
+      background:var(--surface); border-top:1px solid var(--border);
+      padding:12px 24px; color:var(--light-grey); font-size:13px;
+      display:flex; gap:24px; flex-wrap:wrap; margin-top:32px;
     }
-    footer a { color: var(--light-grey); text-decoration: none; }
-    footer a:hover { text-decoration: underline; color: var(--blue); }
-
-    /* ── TIMELINE ── */
-    .timeline { margin-top: 12px; }
-    .tl-item { display: flex; gap: 14px; margin-bottom: 16px; }
-    .tl-dot-col { display: flex; flex-direction: column; align-items: center; padding-top: 2px; }
-    .tl-dot { width: 10px; height: 10px; border-radius: 50%; background: #4285F4; flex-shrink: 0; }
-    .tl-line { flex: 1; width: 2px; background: var(--border); margin-top: 4px; }
-    .tl-content { flex: 1; }
-    .tl-company { font-weight: 500; font-size: 14px; }
-    .tl-meta { color: var(--light-grey); font-size: 12px; margin: 2px 0 4px; }
-    .tl-desc { font-size: 13px; color: #4d5156; line-height: 1.5; }
-
-    .section-divider { border: none; border-top: 1px solid var(--border); margin: 8px 0 24px; }
+    footer a { color:var(--light-grey); text-decoration:none; }
+    footer a:hover { text-decoration:underline; color:var(--blue); }
 
     @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-    .result, .featured, .paa, .kp { animation: fadeIn .3s ease both; }
+    .result,.featured,.paa,.kp,.detail-hero,.exp-card,.edu-card,.contact-card { animation:fadeIn .3s ease both; }
   </style>
 </head>
 <body>
 
 <!-- HEADER -->
 <header>
-  <div class="logo">
+  <div class="logo" onclick="showPage('home')">
     <span>A</span><span>d</span><span>a</span><span>r</span><span>s</span><span>h</span>
   </div>
   <div class="search-bar">
     <span class="material-symbols-outlined">search</span>
     <div class="query">Adarsh Anand – Backend Engineer</div>
-    <span class="material-symbols-outlined" style="cursor:pointer">close</span>
-    <span style="color:var(--border);font-size:22px">|</span>
     <span class="material-symbols-outlined" style="color:#4285F4;cursor:pointer">search</span>
   </div>
   <div class="header-right">
     <span class="material-symbols-outlined" style="color:var(--light-grey);cursor:pointer;font-size:22px">apps</span>
-    <div class="avatar">AA</div>
+    <!-- Header avatar mirrors profile photo -->
+    <div class="avatar">
+      <img src="Adarsh.png"
+           alt="AA"
+           onerror="this.outerHTML='AA'" />
+    </div>
   </div>
 </header>
 
 <!-- NAV TABS -->
 <nav>
-  <a href="#all" class="active" onclick="showSection('all',this)">
+  <a class="active" data-page="home" onclick="showPage('home',this)">
     <span class="material-symbols-outlined">language</span> All
   </a>
-  <a href="#experience" onclick="showSection('experience',this)">
+  <a data-page="experience" onclick="showPage('experience',this)">
     <span class="material-symbols-outlined">work</span> Experience
   </a>
-  <a href="#projects" onclick="showSection('projects',this)">
+  <a data-page="projects" onclick="showPage('projects',this)">
     <span class="material-symbols-outlined">code</span> Projects
   </a>
-  <a href="#education" onclick="showSection('education',this)">
+  <a data-page="education" onclick="showPage('education',this)">
     <span class="material-symbols-outlined">school</span> Education
   </a>
-  <a href="#skills" onclick="showSection('skills',this)">
+  <a data-page="skills" onclick="showPage('skills',this)">
     <span class="material-symbols-outlined">build</span> Skills
   </a>
-  <a href="#contact" onclick="showSection('contact',this)">
+  <a data-page="contact" onclick="showPage('contact',this)">
     <span class="material-symbols-outlined">email</span> Contact
   </a>
 </nav>
 
-<!-- MAIN LAYOUT -->
+<!-- ═══════════════════════════════════════════ MAIN LAYOUT ═══════════════════════════════════════════ -->
 <div class="layout">
-  <!-- LEFT COLUMN -->
   <main>
-    <div class="result-meta">About 2+ years of backend engineering experience (0.18 seconds)</div>
 
-    <!-- FEATURED SNIPPET -->
-    <div class="featured" id="sec-all-featured">
-      <div class="featured-label">✦ Featured — Quick Overview</div>
-      <div class="featured-title">Adarsh Anand — Backend Engineer at Oracle</div>
-      <div class="featured-body">
-        Backend engineer at Oracle (Hyderabad) building distributed cloud systems for identity governance 
-        and large-scale data processing. B.Tech in Electrical Engineering from <strong>IIT Kanpur (2023)</strong>. 
-        Specializes in performance optimization, Kubernetes infrastructure, and terabyte-scale data pipelines.
-      </div>
-      <div class="skill-pills">
-        <span class="pill">Python</span>
-        <span class="pill">Golang</span>
-        <span class="pill">Java</span>
-        <span class="pill green">Kubernetes</span>
-        <span class="pill green">Redis</span>
-        <span class="pill green">Docker</span>
-        <span class="pill yellow">SQL / PL-SQL</span>
-        <span class="pill yellow">ETL / Parquet</span>
-        <span class="pill red">REST APIs</span>
-        <span class="pill red">Kafka</span>
-      </div>
-    </div>
+    <!-- ╔══════════════╗ -->
+    <!-- ║  HOME PAGE   ║ -->
+    <!-- ╚══════════════╝ -->
+    <div class="page active" id="page-home">
+      <div class="result-meta">About 3 years of backend engineering experience (0.18 seconds)</div>
 
-    <!-- ORACLE – PRIMARY RESULT -->
-    <div class="result" id="sec-experience">
-      <div class="result-url">
-        <div class="result-favicon">O</div>
-        <div class="result-url-text">oracle.com › cloud › access-governance › adarsh-anand</div>
-      </div>
-      <a class="result-title">Work Experience – Oracle Member of Technical Staff (MTS IC2)</a>
-      <div class="result-desc">
-        <strong>Oracle – Access Governance, Hyderabad</strong> &nbsp;·&nbsp; Jun 2023 – Present<br/>
-        Designed 40+ SQL queries for Oracle Access Governance dashboards (18+ tables, 100+ indexes), 
-        achieving <strong>650% performance improvement</strong> via AWR analysis and partitioning. 
-        Automated deployment of 50+ microservices across 15+ Kubernetes namespaces using Helm, cutting 
-        deployment time by <strong>over 60%</strong>. Transformed <strong>10 TB+</strong> legacy data using JOLT specs 
-        with 65% API latency reduction through Redis caching (95% cache hit rate).
-      </div>
-      <div class="sitelinks">
-        <a class="sitelink" href="#">
-          Access Governance
-          <small>OAG dashboards & SQL tuning</small>
-        </a>
-        <a class="sitelink" href="#">
-          DevOps Work
-          <small>Kubernetes, Helm, Docker</small>
-        </a>
-        <a class="sitelink" href="#">
-          ETL & Data
-          <small>10TB+ JOLT, Redis, Parquet</small>
-        </a>
-        <a class="sitelink" href="#">
-          OAC Reports
-          <small>Analytics Cloud POC</small>
-        </a>
-      </div>
-    </div>
-
-    <hr class="section-divider"/>
-
-    <!-- PEOPLE ALSO ASK -->
-    <div class="paa">
-      <div class="paa-title">People also ask</div>
-
-      <div class="paa-item" onclick="togglePAA(this)">
-        <div class="paa-q">
-          What did Adarsh achieve at Oracle?
-          <span class="material-symbols-outlined">expand_more</span>
+      <!-- Featured snippet -->
+      <div class="featured">
+        <div class="featured-label">✦ Featured — Quick Overview</div>
+        <div class="featured-title">Adarsh Anand — Backend Engineer at Oracle</div>
+        <div class="featured-body">
+          Backend engineer at Oracle (Hyderabad) building distributed cloud systems for identity governance
+          and large-scale data processing. B.Tech in Electrical Engineering from <strong>IIT Kanpur (2023)</strong>.
+          Specializes in performance optimization, Kubernetes infrastructure, and terabyte-scale data pipelines.
         </div>
-        <div class="paa-a">
-          At Oracle's Access Governance team, Adarsh designed 40+ optimized SQL queries delivering 650% speedup, 
-          automated deployments reducing release times by 60%, removed 39% redundant logging data, and transformed 
-          10TB+ legacy datasets with Redis caching reducing API latency by 65%. He also led the Direct Modify Account 
-          feature and delivered OAC POC reports for audit compliance.
+        <div class="skill-pills">
+          <span class="pill">Python</span><span class="pill">Golang</span><span class="pill">Java</span>
+          <span class="pill green">Kubernetes</span><span class="pill green">Redis</span><span class="pill green">Docker</span>
+          <span class="pill yellow">SQL / PL-SQL</span><span class="pill yellow">ETL / Parquet</span>
+          <span class="pill red">REST APIs</span><span class="pill red">Kafka</span>
         </div>
       </div>
 
-      <div class="paa-item" onclick="togglePAA(this)">
-        <div class="paa-q">
-          What is his tech stack?
-          <span class="material-symbols-outlined">expand_more</span>
+      <!-- Experience result -->
+      <div class="result">
+        <div class="result-url">
+          <div class="result-favicon">O</div>
+          <div class="result-url-text">oracle.com › cloud › access-governance › adarsh-anand</div>
         </div>
-        <div class="paa-a">
-          <strong>Languages:</strong> Python, Golang, Java, C/C++, JavaScript, PL/SQL<br/>
-          <strong>Backend:</strong> REST APIs, Microservices, Redis, Kafka, Flink<br/>
-          <strong>Infrastructure:</strong> Kubernetes, Docker, Helm, CI/CD<br/>
-          <strong>Data:</strong> ETL, Parquet, SQL performance tuning, AWR analysis, Oracle DB<br/>
-          <strong>Other:</strong> Regex, Groovy, OCI Logging, JSON Schema
+        <a class="result-title" onclick="showPage('experience')">Work Experience – Oracle Member of Technical Staff (MTS IC2)</a>
+        <div class="result-desc">
+          <strong>Oracle – Access Governance, Hyderabad</strong> &nbsp;·&nbsp; Jun 2023 – Present<br/>
+          Designed 40+ SQL queries for Oracle Access Governance dashboards achieving <strong>650% performance improvement</strong>.
+          Automated deployment of 50+ microservices across 15+ Kubernetes namespaces, cutting deployment time by <strong>60%</strong>.
+          Transformed <strong>10 TB+</strong> legacy data using JOLT specs with 65% API latency reduction. Engineered
+          <strong>JSON Schema–compliant payloads</strong> for the Direct Modify Account feature enabling UI-level editing of complex nested attributes.
         </div>
-      </div>
-
-      <div class="paa-item" onclick="togglePAA(this)">
-        <div class="paa-q">
-          Where did Adarsh study?
-          <span class="material-symbols-outlined">expand_more</span>
-        </div>
-        <div class="paa-a">
-          Adarsh holds a B.Tech in Electrical Engineering from the <strong>Indian Institute of Technology (IIT) Kanpur</strong>, 
-          one of India's premier engineering institutions, graduating in 2023. He also interned at Oracle's Content 
-          Management division in Bangalore in 2022 and received a Pre-Placement Offer for exceptional performance.
+        <div class="sitelinks">
+          <div class="sitelink" onclick="showPage('experience')">Access Governance<small>OAG dashboards & SQL tuning</small></div>
+          <div class="sitelink" onclick="showPage('experience')">DevOps Work<small>Kubernetes, Helm, Docker</small></div>
+          <div class="sitelink" onclick="showPage('experience')">ETL & Data<small>10TB+ JOLT, Redis, Parquet</small></div>
+          <div class="sitelink" onclick="showPage('experience')">OAC Reports<small>Analytics Cloud POC</small></div>
         </div>
       </div>
 
-      <div class="paa-item" onclick="togglePAA(this)">
-        <div class="paa-q">
-          What personal projects has he built?
-          <span class="material-symbols-outlined">expand_more</span>
-        </div>
-        <div class="paa-a">
-          Adarsh has built a <strong>Gold-Denominated World Assets (GDWA)</strong> financial analytics dashboard 
-          benchmarking 10+ global assets against gold, and an <strong>Algorithmic Trading & Backtesting Suite</strong> 
-          using Python, Golang, and the Binance API — featuring live crypto mock-trading, WebSocket market data, 
-          and AI-driven strategy modules.
-        </div>
-      </div>
-    </div>
+      <hr class="section-divider"/>
 
-    <!-- PROJECTS RESULT -->
-    <div class="result" id="sec-projects">
-      <div class="result-url">
-        <div class="result-favicon" style="background:linear-gradient(135deg,#FBBC05,#EA4335)">P</div>
-        <div class="result-url-text">github.com › idealenjoyment › projects</div>
+      <!-- People Also Ask -->
+      <div class="paa">
+        <div class="paa-title">People also ask</div>
+        <div class="paa-item" onclick="togglePAA(this)">
+          <div class="paa-q">What did Adarsh achieve at Oracle?<span class="material-symbols-outlined">expand_more</span></div>
+          <div class="paa-a">At Oracle's Access Governance team, Adarsh designed 40+ optimized SQL queries delivering 650% speedup, automated deployments reducing release times by 60%, removed 39% redundant logging data, and transformed 10TB+ legacy datasets with Redis caching reducing API latency by 65%. He also engineered JSON Schema–compliant payloads for the Direct Modify Account feature and led OAC POC reports for audit compliance.</div>
+        </div>
+        <div class="paa-item" onclick="togglePAA(this)">
+          <div class="paa-q">What is his tech stack?<span class="material-symbols-outlined">expand_more</span></div>
+          <div class="paa-a"><strong>Languages:</strong> Python, Golang, Java, C/C++, JavaScript, PL/SQL<br/><strong>Backend:</strong> REST APIs, Microservices, Redis, Kafka, Flink, JSON Schema<br/><strong>Infrastructure:</strong> Kubernetes, Docker, Helm, CI/CD<br/><strong>Data:</strong> ETL, Parquet, SQL performance tuning, AWR analysis, Oracle DB</div>
+        </div>
+        <div class="paa-item" onclick="togglePAA(this)">
+          <div class="paa-q">Where did Adarsh study?<span class="material-symbols-outlined">expand_more</span></div>
+          <div class="paa-a">Adarsh holds a B.Tech in Electrical Engineering from <strong>IIT Kanpur</strong>, graduating in 2023. He interned at Oracle's Content Management division in Bangalore in 2022 and received a Pre-Placement Offer for exceptional performance.</div>
+        </div>
+        <div class="paa-item" onclick="togglePAA(this)">
+          <div class="paa-q">What personal projects has he built?<span class="material-symbols-outlined">expand_more</span></div>
+          <div class="paa-a">Adarsh built a <strong>Gold-Denominated World Assets (GDWA)</strong> financial analytics dashboard benchmarking 10+ global assets against gold, and an <strong>Algorithmic Trading & Backtesting Suite</strong> using Python, Golang, and Binance API — featuring live crypto mock-trading, WebSocket data pipelines, and AI-driven strategy modules.</div>
+        </div>
       </div>
-      <a class="result-title" href="https://github.com/idealenjoyment" target="_blank">Key Projects – Personal Engineering Work</a>
-      <div class="result-desc">Two flagship personal projects demonstrating full-stack data engineering and financial systems expertise.</div>
-      <div class="project-grid">
-        <a class="project-card" href="https://github.com/idealenjoyment" target="_blank">
-          <div class="project-icon">📊</div>
-          <div class="project-name">Gold-Denominated World Assets</div>
-          <div class="project-tech">Python · Streamlit · Plotly · Pandas · yFinance &nbsp;·&nbsp; 2025</div>
-          <div class="project-desc">
-            Financial analytics dashboard benchmarking S&P 500, BTC, ETH, Nifty 50, Nikkei & Silver against Gold. 
-            Features rolling volatility, drawdown heatmaps, and correlation matrices.
+
+      <!-- Projects result -->
+      <div class="result">
+        <div class="result-url">
+          <div class="result-favicon" style="background:linear-gradient(135deg,#FBBC05,#EA4335)">P</div>
+          <div class="result-url-text">github.com › adarsh-anand1 › projects</div>
+        </div>
+        <a class="result-title" onclick="showPage('projects')">Key Projects – Personal Engineering Work</a>
+        <div class="result-desc">Two flagship personal projects demonstrating full-stack data engineering and financial systems expertise.</div>
+        <div class="project-grid">
+          <div class="project-card" onclick="showPage('projects')">
+            <div class="project-icon">📊</div>
+            <div class="project-name">Gold-Denominated World Assets</div>
+            <div class="project-tech">Python · Streamlit · Plotly · Pandas · yFinance · 2025</div>
+            <div class="project-desc">Financial analytics dashboard benchmarking S&P 500, BTC, ETH, Nifty 50 & Silver against Gold. Rolling volatility, drawdown heatmaps, correlation matrices.</div>
           </div>
-        </a>
-        <a class="project-card" href="https://github.com/idealenjoyment" target="_blank">
-          <div class="project-icon">🤖</div>
-          <div class="project-name">Algo Trading & Backtesting Suite</div>
-          <div class="project-tech">Python · Golang · Binance API · Jupyter &nbsp;·&nbsp; 2024</div>
-          <div class="project-desc">
-            Full-stack trading toolkit: strategy backtester, live crypto mock-trading, Binance WebSocket data pipeline 
-            in Golang, and AI-model-driven strategy module.
-          </div>
-        </a>
-      </div>
-    </div>
-
-    <hr class="section-divider"/>
-
-    <!-- EDUCATION RESULT -->
-    <div class="result" id="sec-education">
-      <div class="result-url">
-        <div class="result-favicon" style="background:linear-gradient(135deg,#34A853,#4285F4)">E</div>
-        <div class="result-url-text">iitk.ac.in › departments › ee › adarsh-anand</div>
-      </div>
-      <a class="result-title">Education – IIT Kanpur, B.Tech Electrical Engineering</a>
-      <div class="result-desc">
-        <strong>Indian Institute of Technology Kanpur</strong> · B.Tech in Electrical Engineering · 2019 – 2023<br/>
-        One of India's top-ranked engineering institutes (QS World University Rankings). 
-        Active member and founding member of the <strong>Toastmasters IIT Kanpur Chapter</strong> — 
-        enhanced public speaking and leadership skills for 100+ students across 20+ sessions.
-      </div>
-      <div class="timeline" style="margin-top:16px">
-        <div class="tl-item">
-          <div class="tl-dot-col"><div class="tl-dot" style="background:#EA4335"></div><div class="tl-line"></div></div>
-          <div class="tl-content">
-            <div class="tl-company">Oracle – MTS IC2, Access Governance</div>
-            <div class="tl-meta">Jun 2023 – Present · Hyderabad, India</div>
-            <div class="tl-desc">Building distributed identity governance systems at scale.</div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-dot-col"><div class="tl-dot" style="background:#FBBC05"></div><div class="tl-line"></div></div>
-          <div class="tl-content">
-            <div class="tl-company">Oracle – Intern, Content Management (OCM)</div>
-            <div class="tl-meta">May 2022 – Jul 2022 · Bangalore, India</div>
-            <div class="tl-desc">Built XSS-prevention algorithm for file uploads. Received Pre-Placement Offer.</div>
-          </div>
-        </div>
-        <div class="tl-item">
-          <div class="tl-dot-col"><div class="tl-dot" style="background:#34A853"></div></div>
-          <div class="tl-content">
-            <div class="tl-company">IIT Kanpur – B.Tech Electrical Engineering</div>
-            <div class="tl-meta">2019 – 2023 · Kanpur, Uttar Pradesh</div>
-            <div class="tl-desc">Founding member of Toastmasters IIT Kanpur Chapter.</div>
+          <div class="project-card" onclick="showPage('projects')">
+            <div class="project-icon">🤖</div>
+            <div class="project-name">Algo Trading & Backtesting Suite</div>
+            <div class="project-tech">Python · Golang · Binance API · Jupyter · 2024</div>
+            <div class="project-desc">Full-stack trading toolkit: strategy backtester, live crypto mock-trading, Binance WebSocket pipeline in Golang, AI-model-driven strategy module.</div>
           </div>
         </div>
       </div>
-    </div>
 
-    <hr class="section-divider"/>
+      <hr class="section-divider"/>
 
-    <!-- SKILLS RESULT -->
-    <div class="result" id="sec-skills">
-      <div class="result-url">
-        <div class="result-favicon" style="background:linear-gradient(135deg,#4285F4,#681da8)">S</div>
-        <div class="result-url-text">adarsh-anand.dev › skills</div>
+      <!-- Education result -->
+      <div class="result">
+        <div class="result-url">
+          <div class="result-favicon" style="background:linear-gradient(135deg,#34A853,#4285F4)">E</div>
+          <div class="result-url-text">iitk.ac.in › departments › ee › adarsh-anand</div>
+        </div>
+        <a class="result-title" onclick="showPage('education')">Education – IIT Kanpur, B.Tech Electrical Engineering</a>
+        <div class="result-desc">
+          <strong>Indian Institute of Technology Kanpur</strong> · B.Tech in Electrical Engineering · 2019 – 2023.<br/>
+          Founding member of the Toastmasters IIT Kanpur Chapter, enhancing public speaking for 100+ students across 20+ sessions.
+        </div>
       </div>
-      <a class="result-title">Technical Skills – Languages, Backend, Infrastructure</a>
-      <div class="result-desc" style="margin-bottom:10px">Full-stack backend engineering capabilities across systems, data, and cloud infrastructure.</div>
-      <div class="skill-pills">
-        <span class="pill">C / C++</span>
-        <span class="pill">Java</span>
-        <span class="pill">Python</span>
-        <span class="pill">Golang</span>
-        <span class="pill">JavaScript</span>
-        <span class="pill">PL/SQL</span>
-        <span class="pill green">REST APIs</span>
-        <span class="pill green">Microservices</span>
-        <span class="pill green">Redis</span>
-        <span class="pill green">Kafka</span>
-        <span class="pill green">Flink</span>
-        <span class="pill yellow">Kubernetes</span>
-        <span class="pill yellow">Docker</span>
-        <span class="pill yellow">Helm</span>
-        <span class="pill yellow">CI/CD</span>
-        <span class="pill red">ETL</span>
-        <span class="pill red">Parquet</span>
-        <span class="pill red">Oracle DB</span>
-        <span class="pill red">OCI Logging</span>
-      </div>
-    </div>
 
-    <!-- CONTACT -->
-    <div class="result" id="sec-contact">
-      <div class="result-url">
-        <div class="result-favicon" style="background:linear-gradient(135deg,#EA4335,#FBBC05)">C</div>
-        <div class="result-url-text">adarsh-anand.dev › contact</div>
+      <hr class="section-divider"/>
+
+      <!-- Resume result -->
+      <div class="result">
+        <div class="result-url">
+          <div class="result-favicon" style="background:linear-gradient(135deg,#1a73e8,#4285F4)">R</div>
+          <div class="result-url-text">adarsh-anand.dev › resume › Adarsh_Anand_Resume.pdf</div>
+        </div>
+        <a class="result-title" href="Adarsh_Resume.pdf" download="Adarsh_Anand_Resume.pdf">Adarsh Anand – Full Resume (PDF)</a>
+        <div class="result-desc">Download the complete resume covering work experience at Oracle, IIT Kanpur education, personal projects, and technical skills. Last updated 2025.</div>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+          <a href="Adarsh_Resume.pdf" download="Adarsh_Anand_Resume.pdf"
+            style="display:inline-flex;align-items:center;gap:8px;padding:9px 20px;border-radius:20px;
+                   background:#1a73e8;color:#fff;text-decoration:none;font-size:13px;font-weight:600;
+                   font-family:'Google Sans',sans-serif;transition:background .15s;"
+            onmouseover="this.style.background='#1557b0'" onmouseout="this.style.background='#1a73e8'">
+            <span class="material-symbols-outlined" style="font-size:17px">download</span>Download PDF
+          </a>
+          <a href="Adarsh_Resume.pdf" target="_blank"
+            style="display:inline-flex;align-items:center;gap:8px;padding:9px 20px;border-radius:20px;
+                   border:1.5px solid #1a73e8;color:#1a73e8;text-decoration:none;font-size:13px;font-weight:600;
+                   font-family:'Google Sans',sans-serif;transition:background .15s;"
+            onmouseover="this.style.background='#e8f0fe'" onmouseout="this.style.background='transparent'">
+            <span class="material-symbols-outlined" style="font-size:17px">open_in_new</span>View in Browser
+          </a>
+        </div>
       </div>
-      <a class="result-title">Contact Adarsh Anand – Get In Touch</a>
-      <div class="result-desc">Available for interesting backend, distributed systems, or fintech opportunities.</div>
-      <div class="sitelinks" style="margin-top:12px">
-        <a class="sitelink" href="mailto:adarsh1anand1@gmail.com">
-          ✉️ Email
-          <small>adarsh1anand1@gmail.com</small>
-        </a>
-        <a class="sitelink" href="https://linkedin.com/in/adarsh-anand1" target="_blank">
-          💼 LinkedIn
-          <small>adarsh-anand1</small>
-        </a>
-        <a class="sitelink" href="https://github.com/idealenjoyment" target="_blank">
-          🐙 GitHub
-          <small>adarsh-anand1</small>
-        </a>
-        <a class="sitelink" href="tel:+918529761909">
-          📱 Phone
-          <small>+91-8529761909</small>
-        </a>
+    </div><!-- end #page-home -->
+
+
+    <!-- ╔════════════════════╗ -->
+    <!-- ║  EXPERIENCE PAGE   ║ -->
+    <!-- ╚════════════════════╝ -->
+    <div class="page" id="page-experience">
+      <div class="result-meta">Work Experience — Adarsh Anand</div>
+      <span class="detail-back" onclick="showPage('home')"><span class="material-symbols-outlined">arrow_back</span> Back to All results</span>
+
+      <div class="detail-hero">
+        <div class="detail-hero-title">💼 Work Experience</div>
+        <div class="detail-hero-sub">Backend Engineer · Distributed Systems · Cloud Infrastructure</div>
+        <div class="skill-pills">
+          <span class="pill green">Jun 2023 – Present</span>
+          <span class="pill">Oracle MTS IC2</span>
+          <span class="pill yellow">Hyderabad, India</span>
+        </div>
       </div>
-    </div>
-    <!-- RESUME DOWNLOAD -->
-    <div class="result">
-      <div class="result-url">
-        <div class="result-favicon" style="background:linear-gradient(135deg,#1a73e8,#4285F4)">R</div>
-        <div class="result-url-text">adarsh-anand.dev › resume › Adarsh_Anand_Resume.pdf</div>
+
+      <div class="detail-section">
+        <div class="detail-section-title">Current Role</div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <div>
+              <div class="exp-company">🔴 Oracle</div>
+              <div class="exp-role">Member of Technical Staff IC2 – Access Governance</div>
+              <div class="exp-location">📍 Hyderabad, India</div>
+            </div>
+            <div class="exp-period">Jun 2023 – Present</div>
+          </div>
+          <ul class="exp-bullets">
+            <li>Designed <strong>40+ SQL queries</strong> for Oracle Access Governance dashboards, researching 18+ tables and 100+ indexes — optimized performance by <strong>650%</strong> through AWR analysis and partitioning.</li>
+            <li>Developed automated shell scripts to deploy Docker containers of <strong>50+ microservices</strong> across 15+ Kubernetes namespaces via Helm charts, reducing deployment time by <strong>over 60%</strong>.</li>
+            <li>Optimized logging system by removing <strong>39% redundant data</strong> (12 GB → 7.3 GB/day) using regular expressions, and improved processing speed by <strong>400%</strong> through Helm-based log truncation.</li>
+            <li>Transformed <strong>10 TB+ legacy data</strong> using JOLT specs from 30+ targets and Parquet formatting; implemented Redis caching achieving <strong>65% API latency reduction</strong> with 95% cache hit rate.</li>
+            <li>Engineered the <strong>Direct Modify Account</strong> feature by consuming TMS APIs and merging dynamic API responses with static configuration and database data to construct <strong>JSON Schema–compliant payloads</strong>, enabling UI-level editing of complex nested attributes.</li>
+            <li>Led end-to-end development of <strong>Oracle Analytics Cloud (OAC) POC reports</strong> for CorpIDM onboarding under Audit & Compliance requirements.</li>
+            <li>Defined report architecture and development guidelines adopted by the team; delivered knowledge transfer sessions to <strong>4 senior engineers</strong> and collaborated directly with the Chief Architect.</li>
+          </ul>
+          <div class="exp-tags">
+            <span class="exp-tag">Oracle DB</span><span class="exp-tag">SQL</span><span class="exp-tag">Kubernetes</span>
+            <span class="exp-tag">Helm</span><span class="exp-tag">Docker</span><span class="exp-tag">Redis</span>
+            <span class="exp-tag">ETL</span><span class="exp-tag">Parquet</span><span class="exp-tag">JOLT</span>
+            <span class="exp-tag">JSON Schema</span><span class="exp-tag">REST APIs</span><span class="exp-tag">OCI Logging</span>
+            <span class="exp-tag">Regex</span><span class="exp-tag">Groovy</span><span class="exp-tag">AWR</span><span class="exp-tag">OAC</span>
+          </div>
+        </div>
       </div>
-      <a class="result-title" href="Adarsh_Resume.pdf" download="Adarsh_Anand_Resume.pdf">
-        Adarsh Anand – Full Resume (PDF)
-      </a>
-      <div class="result-desc">
-        Download the complete resume covering work experience at Oracle, IIT Kanpur education, 
-        personal projects, and technical skills. Last updated 2025.
+
+      <div class="detail-section">
+        <div class="detail-section-title">Previous Experience</div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <div>
+              <div class="exp-company">🔴 Oracle</div>
+              <div class="exp-role">Intern – Oracle Content Management (OCM)</div>
+              <div class="exp-location">📍 Bangalore, India</div>
+            </div>
+            <div class="exp-period">May 2022 – Jul 2022</div>
+          </div>
+          <ul class="exp-bullets">
+            <li>Developed an algorithm to prevent <strong>Cross-Site Scripting (XSS) attacks</strong> on files uploaded to the OCM system.</li>
+            <li>Received a <strong>Pre-Placement Offer</strong> from Oracle for exemplary performance during the internship at the OCM division.</li>
+          </ul>
+          <div class="exp-tags">
+            <span class="exp-tag">XSS Prevention</span><span class="exp-tag">Security</span><span class="exp-tag">OCM</span>
+          </div>
+        </div>
       </div>
-      <div style="margin-top:12px">
-        <a href="Adarsh_Resume.pdf" download="Adarsh_Anand_Resume.pdf"
-          style="display:inline-flex;align-items:center;gap:8px;
-                 padding:9px 20px;border-radius:20px;
-                 background:#1a73e8;color:#fff;text-decoration:none;
-                 font-size:13px;font-weight:600;font-family:'Google Sans',sans-serif;
-                 transition:background .15s;margin-right:10px;"
-          onmouseover="this.style.background='#1557b0'"
-          onmouseout="this.style.background='#1a73e8'">
-          <span class="material-symbols-outlined" style="font-size:17px">download</span>
-          Download PDF
-        </a>
-        <a href="Adarsh_Resume.pdf" target="_blank"
-          style="display:inline-flex;align-items:center;gap:8px;
-                 padding:9px 20px;border-radius:20px;
-                 border:1.5px solid #1a73e8;color:#1a73e8;text-decoration:none;
-                 font-size:13px;font-weight:600;font-family:'Google Sans',sans-serif;
-                 transition:background .15s;"
-          onmouseover="this.style.background='#e8f0fe'"
-          onmouseout="this.style.background='transparent'">
-          <span class="material-symbols-outlined" style="font-size:17px">open_in_new</span>
-          View in Browser
-        </a>
+
+      <div class="detail-section">
+        <div class="detail-section-title">Career Timeline</div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot-col"><div class="tl-dot" style="background:#EA4335"></div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-company">Oracle – MTS IC2, Access Governance</div>
+              <div class="tl-meta">Jun 2023 – Present · Hyderabad</div>
+              <div class="tl-desc">Building distributed identity governance systems, optimizing data pipelines and Kubernetes infrastructure at scale.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot-col"><div class="tl-dot" style="background:#FBBC05"></div><div class="tl-line"></div></div>
+            <div class="tl-content">
+              <div class="tl-company">Oracle – Intern, Content Management (OCM)</div>
+              <div class="tl-meta">May 2022 – Jul 2022 · Bangalore</div>
+              <div class="tl-desc">XSS-prevention algorithm for file uploads. Received Pre-Placement Offer.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot-col"><div class="tl-dot" style="background:#34A853"></div></div>
+            <div class="tl-content">
+              <div class="tl-company">IIT Kanpur – B.Tech Electrical Engineering</div>
+              <div class="tl-meta">2019 – 2023 · Kanpur, UP</div>
+              <div class="tl-desc">Founding member of Toastmasters IIT Kanpur Chapter.</div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </div><!-- end #page-experience -->
+
+
+    <!-- ╔══════════════════╗ -->
+    <!-- ║  PROJECTS PAGE   ║ -->
+    <!-- ╚══════════════════╝ -->
+    <div class="page" id="page-projects">
+      <div class="result-meta">Projects — Adarsh Anand</div>
+      <span class="detail-back" onclick="showPage('home')"><span class="material-symbols-outlined">arrow_back</span> Back to All results</span>
+
+      <div class="detail-hero">
+        <div class="detail-hero-title">🛠 Personal Projects</div>
+        <div class="detail-hero-sub">Financial Engineering · Algorithmic Trading · Data Pipelines</div>
+        <div class="skill-pills">
+          <span class="pill">Python</span><span class="pill">Golang</span>
+          <span class="pill green">Streamlit</span><span class="pill green">Plotly</span>
+          <span class="pill yellow">Binance API</span><span class="pill yellow">WebSocket</span>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-title">📊 Gold-Denominated World Assets (GDWA)</div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <div>
+              <div class="exp-role">Personal Project · Python, Streamlit, Plotly, Pandas, yFinance</div>
+            </div>
+            <div class="exp-period">2025</div>
+          </div>
+          <ul class="exp-bullets">
+            <li>Built a <strong>financial analytics dashboard</strong> to benchmark 10+ global assets (S&P 500, Nifty 50, Nikkei, BTC, ETH, Silver) against Gold (XAU), stripping fiat inflation to reveal true purchasing power performance.</li>
+            <li>Engineered a <strong>multi-currency denomination engine</strong>, incremental data sync, and interactive analytics including rolling 30-day volatility, underwater drawdown heatmaps, and asset correlation matrices.</li>
+          </ul>
+          <div class="exp-tags">
+            <span class="exp-tag">Python</span><span class="exp-tag">Streamlit</span><span class="exp-tag">Plotly</span>
+            <span class="exp-tag">Pandas</span><span class="exp-tag">yFinance</span><span class="exp-tag">Financial Analytics</span>
+          </div>
+          <div style="margin-top:14px;">
+            <a href="https://github.com/idealenjoyment" target="_blank"
+              style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:20px;
+                     border:1px solid var(--border);color:#1a73e8;text-decoration:none;font-size:13px;font-weight:500;
+                     font-family:'Google Sans',sans-serif;transition:background .15s;"
+              onmouseover="this.style.background='#e8f0fe'" onmouseout="this.style.background='transparent'">
+              <span class="material-symbols-outlined" style="font-size:16px">open_in_new</span>View on GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-title">🤖 Algorithmic Trading & Backtesting Suite</div>
+        <div class="exp-card">
+          <div class="exp-header">
+            <div>
+              <div class="exp-role">Personal Project · Python, Golang, Jupyter, Binance API</div>
+            </div>
+            <div class="exp-period">2024</div>
+          </div>
+          <ul class="exp-bullets">
+            <li>Developed a <strong>full-stack trading toolkit</strong> comprising a strategy backtester, live crypto mock-trading engine, real-time market data fetcher via Binance WebSocket, and an AI-model-driven strategy module.</li>
+            <li>Built a <strong>high-performance live data pipeline in Golang</strong> with order book tracking and a Python layer for strategy execution, signal generation, and performance analytics across equities and crypto.</li>
+          </ul>
+          <div class="exp-tags">
+            <span class="exp-tag">Python</span><span class="exp-tag">Golang</span><span class="exp-tag">Jupyter</span>
+            <span class="exp-tag">Binance API</span><span class="exp-tag">WebSocket</span><span class="exp-tag">Algorithmic Trading</span><span class="exp-tag">AI</span>
+          </div>
+          <div style="margin-top:14px;">
+            <a href="https://github.com/idealenjoyment" target="_blank"
+              style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:20px;
+                     border:1px solid var(--border);color:#1a73e8;text-decoration:none;font-size:13px;font-weight:500;
+                     font-family:'Google Sans',sans-serif;transition:background .15s;"
+              onmouseover="this.style.background='#e8f0fe'" onmouseout="this.style.background='transparent'">
+              <span class="material-symbols-outlined" style="font-size:16px">open_in_new</span>View on GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+    </div><!-- end #page-projects -->
+
+
+    <!-- ╔══════════════════╗ -->
+    <!-- ║  EDUCATION PAGE  ║ -->
+    <!-- ╚══════════════════╝ -->
+    <div class="page" id="page-education">
+      <div class="result-meta">Education — Adarsh Anand</div>
+      <span class="detail-back" onclick="showPage('home')"><span class="material-symbols-outlined">arrow_back</span> Back to All results</span>
+
+      <div class="detail-hero">
+        <div class="detail-hero-title">🎓 Education</div>
+        <div class="detail-hero-sub">IIT Kanpur · B.Tech Electrical Engineering · 2019–2023</div>
+        <div class="skill-pills">
+          <span class="pill green">IIT Kanpur</span>
+          <span class="pill">B.Tech EE</span>
+          <span class="pill yellow">Class of 2023</span>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-title">Degree</div>
+        <div class="edu-card">
+          <div class="edu-icon">🏛️</div>
+          <div class="edu-body">
+            <div class="edu-inst">Indian Institute of Technology Kanpur</div>
+            <div class="edu-degree">B.Tech — Electrical Engineering</div>
+            <div class="edu-period">📍 Kanpur, Uttar Pradesh &nbsp;·&nbsp; 2019 – 2023</div>
+            <div class="edu-detail">
+              One of India's premier engineering institutions, consistently ranked among the top engineering colleges globally (QS World University Rankings). The Electrical Engineering program covers signal processing, control systems, electronics, and computing — providing strong foundations for backend and distributed systems work.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-title">Extracurricular</div>
+        <div class="edu-card">
+          <div class="edu-icon">🎤</div>
+          <div class="edu-body">
+            <div class="edu-inst">Toastmasters International – IIT Kanpur Chapter</div>
+            <div class="edu-degree">Founding Member & Active Leader</div>
+            <div class="edu-period">During B.Tech (2019–2023)</div>
+            <div class="edu-detail">
+              One of the founding members of the <strong>first-ever Toastmasters chapter at IIT Kanpur</strong>. Enhanced public speaking and leadership skills for <strong>100+ students</strong> across <strong>20+ GDs, impromptu and speech sessions</strong>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- end #page-education -->
+
+
+    <!-- ╔════════════════╗ -->
+    <!-- ║  SKILLS PAGE   ║ -->
+    <!-- ╚════════════════╝ -->
+    <div class="page" id="page-skills">
+      <div class="result-meta">Skills — Adarsh Anand</div>
+      <span class="detail-back" onclick="showPage('home')"><span class="material-symbols-outlined">arrow_back</span> Back to All results</span>
+
+      <div class="detail-hero">
+        <div class="detail-hero-title">⚙️ Technical Skills</div>
+        <div class="detail-hero-sub">Languages · Backend · Infrastructure · Data Engineering</div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-title">Full Skill Set</div>
+        <div class="skills-grid">
+          <div class="skill-group">
+            <div class="skill-group-title">Languages</div>
+            <div class="skill-item"><span class="skill-dot"></span>Python</div>
+            <div class="skill-item"><span class="skill-dot"></span>Golang</div>
+            <div class="skill-item"><span class="skill-dot"></span>Java</div>
+            <div class="skill-item"><span class="skill-dot"></span>C / C++</div>
+            <div class="skill-item"><span class="skill-dot"></span>JavaScript</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#137333"></span>PL/SQL</div>
+          </div>
+          <div class="skill-group">
+            <div class="skill-group-title">Backend & APIs</div>
+            <div class="skill-item"><span class="skill-dot"></span>REST APIs</div>
+            <div class="skill-item"><span class="skill-dot"></span>Microservices</div>
+            <div class="skill-item"><span class="skill-dot"></span>JSON Schema</div>
+            <div class="skill-item"><span class="skill-dot"></span>Redis</div>
+            <div class="skill-item"><span class="skill-dot"></span>Kafka</div>
+            <div class="skill-item"><span class="skill-dot"></span>Apache Flink</div>
+          </div>
+          <div class="skill-group">
+            <div class="skill-group-title">Infrastructure</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#b06000"></span>Kubernetes</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#b06000"></span>Docker</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#b06000"></span>Helm</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#b06000"></span>CI/CD</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#b06000"></span>OCI Logging</div>
+          </div>
+          <div class="skill-group">
+            <div class="skill-group-title">Data & DB</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#c5221f"></span>Oracle DB</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#c5221f"></span>ETL Pipelines</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#c5221f"></span>Parquet</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#c5221f"></span>JOLT Specs</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#c5221f"></span>AWR Analysis</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#c5221f"></span>SQL Tuning</div>
+          </div>
+          <div class="skill-group">
+            <div class="skill-group-title">Scripting & Tools</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#681da8"></span>Shell / Zsh</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#681da8"></span>Regex</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#681da8"></span>Groovy</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#681da8"></span>Git</div>
+          </div>
+          <div class="skill-group">
+            <div class="skill-group-title">Finance / Data Science</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#EA4335"></span>Streamlit</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#EA4335"></span>Plotly</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#EA4335"></span>Pandas</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#EA4335"></span>yFinance</div>
+            <div class="skill-item"><span class="skill-dot" style="background:#EA4335"></span>Binance API</div>
+          </div>
+        </div>
+      </div>
+    </div><!-- end #page-skills -->
+
+
+    <!-- ╔══════════════════╗ -->
+    <!-- ║   CONTACT PAGE   ║ -->
+    <!-- ╚══════════════════╝ -->
+    <div class="page" id="page-contact">
+      <div class="result-meta">Contact — Adarsh Anand</div>
+      <span class="detail-back" onclick="showPage('home')"><span class="material-symbols-outlined">arrow_back</span> Back to All results</span>
+
+      <div class="detail-hero">
+        <div class="detail-hero-title">📬 Get In Touch</div>
+        <div class="detail-hero-sub">Open to backend, distributed systems & fintech opportunities</div>
+        <div class="skill-pills">
+          <span class="pill green">Available for opportunities</span>
+          <span class="pill">Hyderabad, India</span>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-title">Contact Details</div>
+        <div class="contact-grid">
+          <a class="contact-card" href="mailto:adarsh1anand1@gmail.com">
+            <div class="contact-icon" style="background:#fce8e6;">📧</div>
+            <div><div class="contact-label">Email</div><div class="contact-val">adarsh1anand1@gmail.com</div></div>
+          </a>
+          <a class="contact-card" href="https://www.linkedin.com/in/adarsh-anand1/" target="_blank">
+            <div class="contact-icon" style="background:#e8f0fe;">💼</div>
+            <div><div class="contact-label">LinkedIn</div><div class="contact-val">linkedin.com/in/adarsh-anand1</div></div>
+          </a>
+          <a class="contact-card" href="https://github.com/idealenjoyment" target="_blank">
+            <div class="contact-icon" style="background:#f1f3f4;">🐙</div>
+            <div><div class="contact-label">GitHub</div><div class="contact-val">github.com/adarsh-anand1</div></div>
+          </a>
+          <a class="contact-card" href="tel:+918529761909">
+            <div class="contact-icon" style="background:#e6f4ea;">📱</div>
+            <div><div class="contact-label">Phone</div><div class="contact-val">+91-8529761909</div></div>
+          </a>
+          <a class="contact-card" href="Adarsh_Resume.pdf" download="Adarsh_Anand_Resume.pdf">
+            <div class="contact-icon" style="background:#fef7e0;">📄</div>
+            <div><div class="contact-label">Resume</div><div class="contact-val">Download PDF</div></div>
+          </a>
+        </div>
+      </div>
+    </div><!-- end #page-contact -->
+
   </main>
 
-  <!-- SIDEBAR – KNOWLEDGE PANEL -->
+  <!-- ═══════════════════ SIDEBAR ═══════════════════ -->
   <aside class="sidebar">
     <div class="kp">
-      <!-- 📸 TO ADD YOUR PHOTO: replace the src below with your image URL or a base64 string -->
       <div class="kp-avatar">
-        <img id="profile-photo"
-          src="YOUR_PHOTO_URL_HERE"
+        <img
+          src="Adarsh.png"
           alt="Adarsh Anand"
           onerror="this.style.display='none';document.getElementById('avatar-initials').style.display='flex'"
         />
@@ -651,10 +861,7 @@
       </div>
       <div class="kp-name">Adarsh Anand</div>
       <div class="kp-role">Backend Engineer · Oracle · Hyderabad</div>
-      <div class="kp-desc">
-        Distributed systems engineer building identity governance infrastructure at Oracle. 
-        IIT Kanpur alum passionate about performance optimization and financial engineering.
-      </div>
+      <div class="kp-desc">Distributed systems engineer building identity governance infrastructure at Oracle. IIT Kanpur alum passionate about performance optimization and financial engineering.</div>
       <div class="kp-row"><div class="kp-label">Current</div><div class="kp-val">Oracle MTS IC2, Hyderabad</div></div>
       <div class="kp-row"><div class="kp-label">Education</div><div class="kp-val">IIT Kanpur — B.Tech EE (2023)</div></div>
       <div class="kp-row"><div class="kp-label">Intern</div><div class="kp-val">Oracle OCM, Bangalore (2022)</div></div>
@@ -681,14 +888,11 @@
       </div>
       <a href="Adarsh_Resume.pdf" download="Adarsh_Anand_Resume.pdf"
         style="display:flex;align-items:center;justify-content:center;gap:8px;
-               margin-top:12px;padding:9px 0;border-radius:20px;
-               background:#1a73e8;color:#fff;text-decoration:none;
-               font-size:13px;font-weight:600;font-family:'Google Sans',sans-serif;
+               margin-top:12px;padding:9px 0;border-radius:20px;background:#1a73e8;color:#fff;
+               text-decoration:none;font-size:13px;font-weight:600;font-family:'Google Sans',sans-serif;
                transition:background .15s;"
-        onmouseover="this.style.background='#1557b0'"
-        onmouseout="this.style.background='#1a73e8'">
-        <span class="material-symbols-outlined" style="font-size:17px">download</span>
-        Download Resume (PDF)
+        onmouseover="this.style.background='#1557b0'" onmouseout="this.style.background='#1a73e8'">
+        <span class="material-symbols-outlined" style="font-size:17px">download</span>Download Resume (PDF)
       </a>
     </div>
 
@@ -696,9 +900,9 @@
     <div class="li-card">
       <div class="li-banner">
         <div class="li-banner-logo">
-          <!-- Profile photo also mirrors here -->
-          <img src="YOUR_PHOTO_URL_HERE" alt="Adarsh"
-            onerror="this.parentElement.innerHTML='<div class=li-banner-logo-fallback>AA</div>'" />
+          <img src="Adarsh.png"
+               alt="Adarsh"
+               onerror="this.parentElement.innerHTML='<div class=li-banner-logo-fallback>AA</div>'" />
         </div>
       </div>
       <div class="li-body">
@@ -717,13 +921,13 @@
         <div class="li-divider"></div>
         <div style="font-size:11px;color:var(--light-grey);margin-bottom:8px;font-weight:500;text-transform:uppercase;letter-spacing:.4px">Highlights</div>
         <div class="li-stat-row">
-          <div class="li-stat"><div class="n">2+</div><div class="l">Years at Oracle</div></div>
+          <div class="li-stat"><div class="n">3</div><div class="l">Years at Oracle</div></div>
           <div class="li-stat"><div class="n">IIT</div><div class="l">Kanpur '23</div></div>
           <div class="li-stat"><div class="n">10TB+</div><div class="l">Data handled</div></div>
         </div>
         <div class="li-divider"></div>
         <div style="font-size:12px;color:#4d5156;line-height:1.5">
-          Backend engineer at Oracle building distributed cloud systems for identity governance. 
+          Backend engineer at Oracle building distributed cloud systems for identity governance.
           Open to networking with engineers in backend, distributed systems & fintech.
         </div>
       </div>
@@ -733,22 +937,22 @@
     <div class="kp">
       <div style="font-size:14px;font-weight:500;margin-bottom:12px;color:#202124">Related searches</div>
       <div style="display:flex;flex-direction:column;gap:8px;">
-        <a href="#" style="color:var(--blue);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:8px">
+        <span style="color:var(--blue);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:8px;cursor:pointer" onclick="showPage('experience')">
           <span class="material-symbols-outlined" style="font-size:16px;color:var(--light-grey)">search</span>
           Oracle Access Governance backend engineer
-        </a>
-        <a href="#" style="color:var(--blue);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:8px">
+        </span>
+        <span style="color:var(--blue);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:8px;cursor:pointer" onclick="showPage('education')">
           <span class="material-symbols-outlined" style="font-size:16px;color:var(--light-grey)">search</span>
           IIT Kanpur Electrical Engineering 2023
-        </a>
-        <a href="#" style="color:var(--blue);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:8px">
+        </span>
+        <span style="color:var(--blue);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:8px;cursor:pointer" onclick="showPage('experience')">
           <span class="material-symbols-outlined" style="font-size:16px;color:var(--light-grey)">search</span>
           Kubernetes microservices Helm deployment
-        </a>
-        <a href="#" style="color:var(--blue);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:8px">
+        </span>
+        <span style="color:var(--blue);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:8px;cursor:pointer" onclick="showPage('projects')">
           <span class="material-symbols-outlined" style="font-size:16px;color:var(--light-grey)">search</span>
           algorithmic trading Python Golang Binance
-        </a>
+        </span>
       </div>
     </div>
   </aside>
@@ -764,27 +968,18 @@
 </footer>
 
 <script>
-  function togglePAA(el) {
-    el.classList.toggle('open');
-  }
+  function togglePAA(el) { el.classList.toggle('open'); }
 
-  function showSection(id, link) {
-    // Update active nav tab
-    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-    link.classList.add('active');
-
-    // Scroll to section
-    const sectionMap = {
-      experience: 'sec-experience',
-      projects: 'sec-projects',
-      education: 'sec-education',
-      skills: 'sec-skills',
-      contact: 'sec-contact',
-      all: 'sec-all-featured'
-    };
-    const el = document.getElementById(sectionMap[id]);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    return false;
+  function showPage(id, navEl) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    // Show target page
+    const target = document.getElementById('page-' + id);
+    if (target) { target.classList.add('active'); window.scrollTo({top:0, behavior:'smooth'}); }
+    // Update nav active state
+    document.querySelectorAll('nav a').forEach(a => {
+      a.classList.toggle('active', a.dataset.page === id);
+    });
   }
 </script>
 </body>
